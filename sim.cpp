@@ -232,7 +232,7 @@ bool SIM::initGprs(const char *apn)
 
   //Second AT_SAPBR
   char *p = _buf;
-  //to overwite the previous data as cmd_cat will concate after null
+  //to overwite the previous data as str_my_cat will concate after null
   *p = '\0';
   p = str_my_cat_P(p, AT_SAPBR_APN);
   *p++ = '\"';
@@ -304,6 +304,7 @@ bool SIM::httpSet(const __FlashStringHelper* url)
 {
 
 }
+
 bool SIM::httpSet(const char *url_P)
 {
   bool ok = false;
@@ -342,10 +343,10 @@ bool SIM::httpPostSetPacketType(const char *content)
   char *p = _buf;
   *p = '\0';
   p = str_my_cat_P(p, AT_HTTPPARA_CONTENT);
-  p = cat_char(p, '\"');
+  p = char_cat(p, '\"');
   p = str_my_cat_P(p, content);
-  p = cat_char(p, '\"');
-  p = cat_char(p, '\r');
+  p = char_cat(p, '\"');
+  p = char_cat(p, '\r');
   //  Serial.println(_buf);
   bool ok = at_cmd(_buf, OK_REPLY);
   return ok;
@@ -362,12 +363,12 @@ bool SIM::httpPostSetPayload(const char *payload)
 
   int dataLen = strlen(payload);
   itoa (dataLen, temp, 10);
-  p = cmd_cat(p, temp);
-  p = cat_char(p, ',');
+  p = str_my_cat(p, temp);
+  p = char_cat(p, ',');
 
   itoa (_http_timeout, temp, 10);
-  p = cmd_cat(p, temp);
-  p = cat_char(p, '\r');
+  p = str_my_cat(p, temp);
+  p = char_cat(p, '\r');
 
   ok = at_cmd(_buf, DOWNLOAD_REPLY);
   Serial.print(F("Download ok: ")); Serial.println(ok);
@@ -389,12 +390,12 @@ bool SIM::httpPostSetPayload(const char *payload)
 
 //   char temp[6];
 //   itoa (payloadSize, temp, 10);
-//   p = cmd_cat(p, temp);
-//   p = cat_char(p, ',');
+//   p = str_my_cat(p, temp);
+//   p = char_cat(p, ',');
 
 //   itoa (timeOut, temp, 10);
-//   p = cmd_cat(p, temp);
-//   p = cat_char(p, '\r');
+//   p = str_my_cat(p, temp);
+//   p = char_cat(p, '\r');
 
 //   ok = at_cmd(_buf, DOWNLOAD_REPLY);
 //   Serial.print(F("Download ok: ")); Serial.println(ok);
@@ -431,8 +432,8 @@ char *SIM::httpStartTransmit(char req_type)
   char *p = _sub_buf;
   *p = '\0';
   p = str_my_cat_P(p, AT_HTTPACTION);
-  p = cat_char(p, req_type);
-  p = cat_char(p, '\r');
+  p = char_cat(p, req_type);
+  p = char_cat(p, '\r');
 
   ok = at_cmd(_sub_buf, OK_REPLY);
   Serial.print(F("POST Session start ok: ")); Serial.println(ok);
@@ -533,7 +534,7 @@ char *SIM::sub_string(const char *s, char first, char last)
 /*
    Concate ram string and return the pointer after concate.
 */
-char *SIM::cmd_cat(char *dest, const char *src)
+char *SIM::str_my_cat(char *dest, const char *src)
 {
   char *ptr = dest;
   int8_t len  = strlen(src);
@@ -559,7 +560,7 @@ char *SIM::str_my_cat_P(char *dest, const char *src)
   return ptr;
 }
 
-char *SIM::cat_char(char *dest, char c)
+char *SIM::char_cat(char *dest, char c)
 {
   //  char *ptr = dest;
   *dest++ = c;

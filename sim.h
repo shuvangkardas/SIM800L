@@ -63,9 +63,9 @@ class SIM
 
     //String manipulation methods
     char *sub_string(const char *s, char first, char last);
-    char *cmd_cat(char *dest, const char *src);
+    char *str_my_cat(char *dest, const char *src);
     char *str_my_cat_P(char *dest, const char *src);
-    char *cat_char(char *dest, char c);
+    char *char_cat(char *dest, char c);
     bool cmd_cmp_P(char *ram_str, const char *prog_str);
     bool validate_ip(const char *ip);
     bool validate_ip_fast(const char *ip);
