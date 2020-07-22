@@ -32,9 +32,16 @@ class SIM
     /***********Attach function******************/
 
     /***********HTTP Methods*********************/
+    // const __FlashStringHelper* ADDRESS
     bool httpSet(const char *url_P);
+    bool httpSet(const __FlashStringHelper* url);
+
     bool httpPostSetPacketType(const char *content);
     bool httpPostSetPayload(const char *payload);
+
+    // bool htttSetPayloadParam(int payloadSize, int timeOut = 10000);
+    // bool httpWritePayload(const char *payload,bool endFlag = false);
+   
     char *httpStartTransmit(char req_type = '1'); //1 = http post | 0 = get
     bool httpClose();
 
@@ -43,8 +50,8 @@ class SIM
     //basic commands methods
     char *send_cmd(const char *cmd);
     char *send_cmd_P(const char *cmd);
-    bool cmd_check_P(const char *in, const char *out);
-    bool cmd_check(const char *in, const char *out);
+    bool at_cmd_P(const char *in_P, const char *out_P);
+    bool at_cmd(const char *in, const char *out_P);
 
     //    typedef char * (*send_func_t)(const char * );
     //    bool cmd_check(send_func_t send_ptr,const char *in, const char *out);
@@ -57,7 +64,7 @@ class SIM
     //String manipulation methods
     char *sub_string(const char *s, char first, char last);
     char *cmd_cat(char *dest, const char *src);
-    char *cmd_cat_P(char *dest, const char *src);
+    char *str_my_cat_P(char *dest, const char *src);
     char *cat_char(char *dest, char c);
     bool cmd_cmp_P(char *ram_str, const char *prog_str);
     bool validate_ip(const char *ip);
@@ -75,6 +82,7 @@ class SIM
     int _http_timeout = 5000;
     //    const char *_apnPtr;
     func_t _simRestart = NULL;
+
 
 
     //    int _timed_read();

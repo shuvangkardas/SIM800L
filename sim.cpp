@@ -142,16 +142,16 @@ char *SIM::send_cmd_P(const char *cmd)
 }
 
 
-bool SIM::cmd_check_P(const char *in, const char *out)
+bool SIM::at_cmd_P(const char *in_P, const char *out_P)
 {
-  char *ptr = send_cmd_P(in);
-  return cmd_cmp_P(ptr, out);
+  char *ptr = send_cmd_P(in_P);
+  return cmd_cmp_P(ptr, out_P);
 }
 
-bool SIM::cmd_check(const char *in, const char *out)
+bool SIM::at_cmd(const char *in, const char *out_P)
 {
   char *ptr = send_cmd(in);
-  return cmd_cmp_P(ptr, out);
+  return cmd_cmp_P(ptr, out_P);
 }
 
 
@@ -164,8 +164,8 @@ bool SIM::isOk()
   do
   {
 //    Serial.print(F("Try: ")); Serial.println(try_count);
-    sim_ok = cmd_check_P(AT, OK_REPLY);
-    //    sim_ok = cmd_check(send_cmd_P,AT,OK_REPLY);
+    sim_ok = at_cmd_P(AT, OK_REPLY);
+    //    sim_ok = at_cmd(send_cmd_P,AT,OK_REPLY);
     if (sim_ok) return true;
   } while (--try_count);
   return false;
@@ -228,27 +228,27 @@ bool SIM::initGprs(const char *apn)
 {
   //First AT_SAPBR
   bool ok = false;
-  ok = cmd_check_P(AT_SAPBR_GPRS, OK_REPLY);
+  ok = at_cmd_P(AT_SAPBR_GPRS, OK_REPLY);
 
   //Second AT_SAPBR
   char *p = _buf;
   //to overwite the previous data as cmd_cat will concate after null
   *p = '\0';
-  p = cmd_cat_P(p, AT_SAPBR_APN);
+  p = str_my_cat_P(p, AT_SAPBR_APN);
   *p++ = '\"';
   *p = '\0';
-  p = cmd_cat_P(p, apn);
+  p = str_my_cat_P(p, apn);
   *p++ = '\"';
   *p++ = '\r';
   *p = '\0';
 
-  ok = cmd_check(_buf, OK_REPLY);
+  ok = at_cmd(_buf, OK_REPLY);
 }
 
 bool SIM::startGPRS()
 {
   //There might be issue with this functions.
-  bool ok = cmd_check_P(AT_SAPBR_OPEN_GPRS, OK_REPLY);
+  bool ok = at_cmd_P(AT_SAPBR_OPEN_GPRS, OK_REPLY);
   return ok;
 }
 
@@ -295,36 +295,40 @@ bool SIM::connectGprs(const char *apn)
 }
 bool SIM::closeGPRS()
 {
-  bool ok = cmd_check_P(AT_SAPBR_CLOSE_GPRS, OK_REPLY);
+  bool ok = at_cmd_P(AT_SAPBR_CLOSE_GPRS, OK_REPLY);
   return ok;
 }
 
 /******************************HTTP*****************************/
+bool SIM::httpSet(const __FlashStringHelper* url)
+{
+
+}
 bool SIM::httpSet(const char *url_P)
 {
   bool ok = false;
-  ok = cmd_check_P(AT_HTTPINIT, OK_REPLY);
+  ok = at_cmd_P(AT_HTTPINIT, OK_REPLY);
   if (!ok) {
     return false;
   }
 
-  ok = cmd_check_P(AT_HTTPPARA_CID, OK_REPLY);
+  ok = at_cmd_P(AT_HTTPPARA_CID, OK_REPLY);
   if (!ok) {
     return false;
   }
 
   char *p = _buf;
   *p = '\0';
-  p = cmd_cat_P(p, AT_HTTPPARA_URL);
+  p = str_my_cat_P(p, AT_HTTPPARA_URL);
   *p++ = '\"';
   *p = '\0';
-  p = cmd_cat_P(p, url_P);
+  p = str_my_cat_P(p, url_P);
   *p++ = '\"';
   *p++ = '\r';
   *p = '\0';
   //  Serial.println(_buf);
   //Send URL
-  ok = cmd_check(_buf, OK_REPLY);
+  ok = at_cmd(_buf, OK_REPLY);
   if (ok) {
     return true;
   }
@@ -332,17 +336,18 @@ bool SIM::httpSet(const char *url_P)
     return false;
   }
 }
+
 bool SIM::httpPostSetPacketType(const char *content)
 {
   char *p = _buf;
   *p = '\0';
-  p = cmd_cat_P(p, AT_HTTPPARA_CONTENT);
+  p = str_my_cat_P(p, AT_HTTPPARA_CONTENT);
   p = cat_char(p, '\"');
-  p = cmd_cat_P(p, content);
+  p = str_my_cat_P(p, content);
   p = cat_char(p, '\"');
   p = cat_char(p, '\r');
   //  Serial.println(_buf);
-  bool ok = cmd_check(_buf, OK_REPLY);
+  bool ok = at_cmd(_buf, OK_REPLY);
   return ok;
 
 }
@@ -352,7 +357,7 @@ bool SIM::httpPostSetPayload(const char *payload)
   char temp[5];
   char *p = _buf;
   *p = '\0';
-  p = cmd_cat_P(p, AT_HTTPDATA);
+  p = str_my_cat_P(p, AT_HTTPDATA);
   //  *p = '\0';
 
   int dataLen = strlen(payload);
@@ -364,27 +369,72 @@ bool SIM::httpPostSetPayload(const char *payload)
   p = cmd_cat(p, temp);
   p = cat_char(p, '\r');
 
-  ok = cmd_check(_buf, DOWNLOAD_REPLY);
+  ok = at_cmd(_buf, DOWNLOAD_REPLY);
   Serial.print(F("Download ok: ")); Serial.println(ok);
   if (!ok) {
     return false;
   }
 
-  ok = cmd_check(payload, OK_REPLY);
+  ok = at_cmd(payload, OK_REPLY);
   return ok;
 
 }
+
+// bool SIM::htttSetPayloadParam(int payloadSize,int timeOut)
+// {
+//   bool ok = false;
+//   char *p = _buf;
+//   *p = '\0';
+//   p = str_my_cat_P(p, AT_HTTPDATA);
+
+//   char temp[6];
+//   itoa (payloadSize, temp, 10);
+//   p = cmd_cat(p, temp);
+//   p = cat_char(p, ',');
+
+//   itoa (timeOut, temp, 10);
+//   p = cmd_cat(p, temp);
+//   p = cat_char(p, '\r');
+
+//   ok = at_cmd(_buf, DOWNLOAD_REPLY);
+//   Serial.print(F("Download ok: ")); Serial.println(ok);
+//   _payloadLen = payloadSize;
+//   _payloadSentLen = 0; 
+// }
+
+// bool SIM::httpWritePayload(const char *payload,bool endFlag)
+// {
+//   int len = strlen(payload);
+//   serial -> write(payload,len-2);
+//   // ok = at_cmd(payload, OK_REPLY);
+//   _payloadSentLen +=   + len;
+//   int remLen = _payloadLen - _payloadSentLen;
+//   Serial.print(F("Remaining: "));Serial.println(remLen);
+//   if(endFlag)
+//   {
+//   	if(_payloadSentLen < _payloadLen)
+//   	{
+//   		Serial.println(F("Printing null.."));
+//   		char null_char = '\n';
+//   		for(int i = 0; i< remLen; i++ )
+//   		{
+//   			Serial.print(".");
+//   			serial -> write((uint8_t)null_char);
+//   		}
+//   	}
+//   }
+// }
 
 char *SIM::httpStartTransmit(char req_type)
 {
   bool ok = false;
   char *p = _sub_buf;
   *p = '\0';
-  p = cmd_cat_P(p, AT_HTTPACTION);
+  p = str_my_cat_P(p, AT_HTTPACTION);
   p = cat_char(p, req_type);
   p = cat_char(p, '\r');
 
-  ok = cmd_check(_sub_buf, OK_REPLY);
+  ok = at_cmd(_sub_buf, OK_REPLY);
   Serial.print(F("POST Session start ok: ")); Serial.println(ok);
 
   char *ptr;
@@ -496,9 +546,9 @@ char *SIM::cmd_cat(char *dest, const char *src)
   return ptr;
 }
 /*
-   concate progmem string and return the pointer after concate.
+   concate progmem string and return the pointer of null position of string.
 */
-char *SIM::cmd_cat_P(char *dest, const char *src)
+char *SIM::str_my_cat_P(char *dest, const char *src)
 {
   char *ptr = dest;
   int8_t len  = strlen_P(src);
