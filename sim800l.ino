@@ -74,7 +74,7 @@ void loop()
     sim.httpPOST(URL, dataPacket, CONTENT_TYPE);
     Serial.print(F("------Time : ")); Serial.println(millis() - startms);
 
-//    sim.closeGPRS();
+    sim.closeGPRS();
     Serial.println(F("<-----------------Loop Ends------------------->"));
     delay(10000);
   }

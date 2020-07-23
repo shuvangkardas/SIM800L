@@ -49,7 +49,7 @@ char *SIM::sub_string(const char *s, char first, char last)
 /*********************Str_CAT function overloading*****************/
 char *SIM::str_cat(char *dest, const __FlashStringHelper *src)
 {
-  Serial.println(F("Flash Function: "));
+//  Serial.println(F("Flash Function: "));
   char *ptr = dest;
   const char *src1 = (const char*)src;
 
@@ -63,7 +63,7 @@ char *SIM::str_cat(char *dest, const __FlashStringHelper *src)
 
 char *SIM::str_cat(char *dest, const char *src)
 {
-  Serial.println(F("RAM Function: "));
+//  Serial.println(F("RAM Function: "));
   char *ptr = dest;
   int8_t len  = strlen(src);
   strncat(ptr, src, len);
@@ -72,26 +72,11 @@ char *SIM::str_cat(char *dest, const char *src)
   //  Serial.println(dest);
   return ptr;
 }
-/*******************Done function overloading********************/
-/*
-   Concate ram string and return the pointer after concate.
-*/
-char *SIM::str_my_cat(char *dest, const char *src)
-{
-  char *ptr = dest;
-  int8_t len  = strlen(src);
-  strncat(ptr, src, len);
-  ptr = ptr + len;
-  *ptr = '\0';        //terminating as extra safety
-  // bool test = *ptr == NULL;
-  //  Serial.print("Last char: ");Serial.print(test);
-  //  Serial.println();
-  return ptr;
-}
+
 /*
    concate progmem string and return the pointer of null position of string.
 */
-char *SIM::str_my_cat_P(char *dest, const char *src)
+char *SIM::str_cat_P(char *dest, const char *src)
 {
   char *ptr = dest;
   int8_t len  = strlen_P(src);
@@ -101,6 +86,22 @@ char *SIM::str_my_cat_P(char *dest, const char *src)
   *ptr = '\0';
   return ptr;
 }
+/*
+   Concate ram string and return the pointer after concate.
+*/
+//char *SIM::str_cat(char *dest, const char *src)
+//{
+//  char *ptr = dest;
+//  int8_t len  = strlen(src);
+//  strncat(ptr, src, len);
+//  ptr = ptr + len;
+//  *ptr = '\0';        //terminating as extra safety
+//  // bool test = *ptr == NULL;
+//  //  Serial.print("Last char: ");Serial.print(test);
+//  //  Serial.println();
+//  return ptr;
+//}
+
 /*
 
 */

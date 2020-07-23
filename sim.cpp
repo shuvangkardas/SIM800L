@@ -231,9 +231,9 @@ bool SIM::initGprs(const __FlashStringHelper *apn)
 
   //Second AT_SAPBR
   char *p = _buf;
-  //to overwite the previous data as str_my_cat will concate after null
+  //to overwite the previous data as str_cat will concate after null
   *p = '\0';
-  p = str_my_cat_P(p, AT_SAPBR_APN);
+  p = str_cat_P(p, AT_SAPBR_APN);
   *p++ = '\"';
   *p = '\0';
   p = str_cat(p, apn);
@@ -251,9 +251,9 @@ bool SIM::initGprs(const char *apn)
 
   //Second AT_SAPBR
   char *p = _buf;
-  //to overwite the previous data as str_my_cat will concate after null
+  //to overwite the previous data as str_cat will concate after null
   *p = '\0';
-  p = str_my_cat_P(p, AT_SAPBR_APN);
+  p = str_cat_P(p, AT_SAPBR_APN);
   *p++ = '\"';
   *p = '\0';
   p = str_cat(p, apn);

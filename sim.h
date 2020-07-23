@@ -43,8 +43,6 @@ class SIM
     
     bool httpPostSetPayload(const char *payload);
 
-    // bool htttSetPayloadParam(int payloadSize, int timeOut = 10000);
-    // bool httpWritePayload(const char *payload,bool endFlag = false);
 
     char *httpStartTransmit(char req_type = '1'); //1 = http post | 0 = get
     bool httpClose();
@@ -58,8 +56,6 @@ class SIM
     bool at_cmd_P(const char *in_P, const char *out_P);
     bool at_cmd(const char *in, const char *out_P);
 
-    //    typedef char * (*send_func_t)(const char * );
-    //    bool cmd_check(send_func_t send_ptr,const char *in, const char *out);
 
     //Serial basic methods
     int _timed_read();
@@ -69,11 +65,9 @@ class SIM
     //String manipulation methods
     char *str_cat(char *dest, const __FlashStringHelper *src);
     char *str_cat(char *dest, const char *src);
-
-    char *sub_string(const char *s, char first, char last);
-    char *str_my_cat(char *dest, const char *src);
-    char *str_my_cat_P(char *dest, const char *src);
+    char *str_cat_P(char *dest, const char *src);
     char *char_cat(char *dest, char c);
+    char *sub_string(const char *s, char first, char last);   
     bool cmd_cmp_P(char *ram_str, const char *prog_str);
     bool validate_ip(const char *ip);
     bool validate_ip_fast(const char *ip);
@@ -93,8 +87,6 @@ class SIM
 
 
 
-    //    int _timed_read();
-    //    char *_read_string(char *str);
     void _buffer_clear();
 
 };
