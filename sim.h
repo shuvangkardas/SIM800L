@@ -22,12 +22,15 @@ class SIM
     bool isOk();
     bool isRegistered();
     bool setBaud(unsigned long baud);
+    
+    bool initGprs(const __FlashStringHelper *apn);
     bool initGprs(const char *apn);
     bool startGPRS();
     bool isGprsConnected(int8_t maxCount = 3);
     bool closeGPRS();
     int8_t getNetworkLevel();
     bool setGPRS(const char *apn);
+    bool connectGprs(const __FlashStringHelper *apn);
     bool connectGprs(const char *apn);
     /***********Attach function******************/
 
@@ -35,7 +38,9 @@ class SIM
     bool httpSet(const __FlashStringHelper *url);//Take addess from Flash
     bool httpSet(const char *url); //Take address from ram
 
+    bool httpPostSetPacketType(const __FlashStringHelper *content);
     bool httpPostSetPacketType(const char *content);
+    
     bool httpPostSetPayload(const char *payload);
 
     // bool htttSetPayloadParam(int payloadSize, int timeOut = 10000);
@@ -44,8 +49,9 @@ class SIM
     char *httpStartTransmit(char req_type = '1'); //1 = http post | 0 = get
     bool httpClose();
 
-    bool httpPOST(const char *URL_P, const char *packet, const char * packetType, int httpCode = 200);
-    bool httpPOST(const __FlashStringHelper *URL, const char *packet, const char * packetType, int httpCode = 200);
+    bool httpPOST(const char *URL, const char *packet, const char * packetType, int httpCode = 200);
+    bool httpPOST(const __FlashStringHelper *URL, const char *packet, const __FlashStringHelper * packetType, int httpCode = 200);
+    
     //basic commands methods
     char *send_cmd(const char *cmd);
     char *send_cmd_P(const char *cmd);

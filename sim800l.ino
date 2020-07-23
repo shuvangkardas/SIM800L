@@ -8,12 +8,21 @@ ShiftRegister74HC595 sr(1, 7, 5, 6);
 #define SR_SIM_ON() sr.set(SR_SIM_PIN, LOW)
 #define SR_SIM_OFF() sr.set(SR_SIM_PIN, HIGH)
 
-const char apn[] PROGMEM = "gpinternet";
-//const char URL[] PROGMEM = "http://dataxlogger.com/data/k5199h01";
-//#define URL F("http://dataxlogger.com/data/k5199h01")
-const char URL[] = "http://dataxlogger.com/data/k5199h01";
 
-const char CONTENT_TYPE[] PROGMEM = "application/json";
+//#define APN F("gpinternet")
+//#define URL F("http://dataxlogger.com/data/k5199h01")
+//#define CONTENT_TYPE F("application/json")
+
+const char APN[] = "gpinternet";
+const char URL[] = "http://dataxlogger.com/data/k5199h01";
+const char CONTENT_TYPE[]  = "application/json";
+
+
+//const char APN[] PROGMEM = "gpinternet";
+//const char URL[] PROGMEM = "http://dataxlogger.com/data/k5199h01";
+//const char CONTENT_TYPE[] PROGMEM = "application/json";
+
+
 
 
 char dataPacket[] = "{\"time\":\"10:20:30\",\"v1\":20,\"I1\":15,\"i1\":27}";
@@ -38,7 +47,7 @@ void setup()
   Serial.print(F("Sig: "));
   Serial.println(sim.getNetworkLevel());
 
-  sim.initGprs(apn);
+  sim.initGprs(APN);
   sim.closeGPRS();
 }
 
@@ -60,7 +69,7 @@ void loop()
   long startms = millis();
   Serial.print(F("Start millis: ")); Serial.println(startms);
 
-  if (sim.connectGprs(apn))
+  if (sim.connectGprs(APN))
   {
     sim.httpPOST(URL, dataPacket, CONTENT_TYPE);
     Serial.print(F("------Time : ")); Serial.println(millis() - startms);
