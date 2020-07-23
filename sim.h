@@ -17,7 +17,7 @@ class SIM
     void setSerialTimeout(int timeout = 50);
     void setSimReadTimeout(int timeout = 2000);
     void attachRestart(func_t restartFun);
-    
+
     /********Sim Basic Functionality*************/
     bool isOk();
     bool isRegistered();
@@ -33,20 +33,20 @@ class SIM
 
     /***********HTTP Methods*********************/
     // const __FlashStringHelper* ADDRESS
-    bool httpSet(const char *url_P);
-    bool httpSet(const __FlashStringHelper* url);
+//    bool httpSet(const char *url_P);
+    bool httpSet(const __FlashStringHelper *url);
 
     bool httpPostSetPacketType(const char *content);
     bool httpPostSetPayload(const char *payload);
 
     // bool htttSetPayloadParam(int payloadSize, int timeOut = 10000);
     // bool httpWritePayload(const char *payload,bool endFlag = false);
-   
+
     char *httpStartTransmit(char req_type = '1'); //1 = http post | 0 = get
     bool httpClose();
 
-    bool httpPOST(const char *URL_P, const char *packet, const char * packetType, int httpCode = 200);
-
+//    bool httpPOST(const char *URL_P, const char *packet, const char * packetType, int httpCode = 200);
+    bool httpPOST(const __FlashStringHelper *URL, const char *packet, const char * packetType, int httpCode = 200);
     //basic commands methods
     char *send_cmd(const char *cmd);
     char *send_cmd_P(const char *cmd);
@@ -62,6 +62,9 @@ class SIM
     char *_read_sim();
 
     //String manipulation methods
+    char *str_cat(char *dest, const __FlashStringHelper *src);
+    char *str_cat(char *dest, const char *src);
+
     char *sub_string(const char *s, char first, char last);
     char *str_my_cat(char *dest, const char *src);
     char *str_my_cat_P(char *dest, const char *src);

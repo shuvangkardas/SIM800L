@@ -9,7 +9,9 @@ ShiftRegister74HC595 sr(1, 7, 5, 6);
 #define SR_SIM_OFF() sr.set(SR_SIM_PIN, HIGH)
 
 const char apn[] PROGMEM = "gpinternet";
-const char URL[] PROGMEM = "http://dataxlogger.com/data/k5199h01";
+//const char URL[] PROGMEM = "http://dataxlogger.com/data/k5199h01";
+#define URL F("http://dataxlogger.com/data/k5199h01")
+
 const char CONTENT_TYPE[] PROGMEM = "application/json";
 
 

@@ -6,14 +6,14 @@
 
 SIM::SIM(Stream *port)
 {
-  
+
   serial = port;
 }
 
 void SIM::begin(int timeout)
 {
   Serial.println(F("Sim begin"));
-  if( _simRestart != NULL)
+  if ( _simRestart != NULL)
   {
     _simRestart();
   }
@@ -163,7 +163,7 @@ bool SIM::isOk()
   long start = millis();
   do
   {
-//    Serial.print(F("Try: ")); Serial.println(try_count);
+    //    Serial.print(F("Try: ")); Serial.println(try_count);
     sim_ok = at_cmd_P(AT, OK_REPLY);
     //    sim_ok = at_cmd(send_cmd_P,AT,OK_REPLY);
     if (sim_ok) return true;
@@ -175,7 +175,7 @@ bool SIM::setBaud(unsigned long baud)
   if (isOk())
   {
     char *ptr = send_cmd_P(AT_BAUD);
-//    Serial.println(ptr);
+    //    Serial.println(ptr);
   }
 
 }
@@ -211,7 +211,7 @@ int8_t SIM::getNetworkLevel()
   do
   {
     char *ptr = send_cmd_P(AT_CSQ);
-//    Serial.println(ptr);
+    //    Serial.println(ptr);
     char *sub_ptr = sub_string(ptr, ':', ',');
     //    Serial.println(sub_ptr);
     net  = atoi(sub_ptr);
@@ -300,12 +300,7 @@ bool SIM::closeGPRS()
 }
 
 /******************************HTTP*****************************/
-bool SIM::httpSet(const __FlashStringHelper* url)
-{
-
-}
-
-bool SIM::httpSet(const char *url_P)
+bool SIM::httpSet(const __FlashStringHelper *url)
 {
   bool ok = false;
   ok = at_cmd_P(AT_HTTPINIT, OK_REPLY);
@@ -323,7 +318,7 @@ bool SIM::httpSet(const char *url_P)
   p = str_my_cat_P(p, AT_HTTPPARA_URL);
   *p++ = '\"';
   *p = '\0';
-  p = str_my_cat_P(p, url_P);
+  p = str_cat(p, url);
   *p++ = '\"';
   *p++ = '\r';
   *p = '\0';
@@ -337,6 +332,39 @@ bool SIM::httpSet(const char *url_P)
     return false;
   }
 }
+
+//bool SIM::httpSet(const char *url_P)
+//{
+//  bool ok = false;
+//  ok = at_cmd_P(AT_HTTPINIT, OK_REPLY);
+//  if (!ok) {
+//    return false;
+//  }
+//
+//  ok = at_cmd_P(AT_HTTPPARA_CID, OK_REPLY);
+//  if (!ok) {
+//    return false;
+//  }
+//
+//  char *p = _buf;
+//  *p = '\0';
+//  p = str_my_cat_P(p, AT_HTTPPARA_URL);
+//  *p++ = '\"';
+//  *p = '\0';
+//  p = str_my_cat_P(p, url_P);
+//  *p++ = '\"';
+//  *p++ = '\r';
+//  *p = '\0';
+//  //  Serial.println(_buf);
+//  //Send URL
+//  ok = at_cmd(_buf, OK_REPLY);
+//  if (ok) {
+//    return true;
+//  }
+//  else {
+//    return false;
+//  }
+//}
 
 bool SIM::httpPostSetPacketType(const char *content)
 {
@@ -400,7 +428,7 @@ bool SIM::httpPostSetPayload(const char *payload)
 //   ok = at_cmd(_buf, DOWNLOAD_REPLY);
 //   Serial.print(F("Download ok: ")); Serial.println(ok);
 //   _payloadLen = payloadSize;
-//   _payloadSentLen = 0; 
+//   _payloadSentLen = 0;
 // }
 
 // bool SIM::httpWritePayload(const char *payload,bool endFlag)
@@ -456,17 +484,39 @@ char *SIM::httpStartTransmit(char req_type)
 bool SIM::httpClose()
 {
   long start = millis();
-  Serial.print("Start: "); Serial.println(start);  
-//  char *ptr = send_cmd_P(AT_HTTPTERM);
+  Serial.print("Start: "); Serial.println(start);
+  //  char *ptr = send_cmd_P(AT_HTTPTERM);
   serial -> print(AT_HTTPTERM);
-//  Serial.println(ptr);
+  //  Serial.println(ptr);
   Serial.print("Close time: "); Serial.println(millis() - start);
 }
 
-bool SIM::httpPOST(const char *URL_P, const char *packet, const char * packetType, int httpCode)
+//bool SIM::httpPOST(const char *URL_P, const char *packet, const char * packetType, int httpCode)
+//{
+//  bool ok = false;
+//  ok = httpSet(URL_P);
+//  ok = httpPostSetPacketType(packetType);
+//  ok = httpPostSetPayload(packet);
+//  char *ptr = httpStartTransmit('1');
+//  char *retPtr = sub_string(ptr, ',', ',');
+//  Serial.println(retPtr);
+//  int retCode = atoi(retPtr);
+//  httpClose();
+//  if (retCode == httpCode)
+//  {
+//    Serial.println(F("HTTP POST Success!"));
+//    return true;
+//  }
+//  else
+//  {
+//    return false;
+//  }
+//}
+
+bool SIM::httpPOST(const __FlashStringHelper *URL, const char *packet, const char * packetType, int httpCode)
 {
   bool ok = false;
-  ok = httpSet(URL_P);
+  ok = httpSet(URL);
   ok = httpPostSetPacketType(packetType);
   ok = httpPostSetPayload(packet);
   char *ptr = httpStartTransmit('1');
@@ -474,7 +524,7 @@ bool SIM::httpPOST(const char *URL_P, const char *packet, const char * packetTyp
   Serial.println(retPtr);
   int retCode = atoi(retPtr);
   httpClose();
-  if(retCode==httpCode)
+  if (retCode == httpCode)
   {
     Serial.println(F("HTTP POST Success!"));
     return true;
@@ -531,6 +581,34 @@ char *SIM::sub_string(const char *s, char first, char last)
     return NULL;
   }
 }
+
+/*********************Str_CAT function overloading*****************/
+char *SIM::str_cat(char *dest, const __FlashStringHelper *src)
+{
+  Serial.println(F("Flash Function: "));
+  char *ptr = dest;
+  const char *src1 = (const char*)src;
+
+  int8_t len  = strlen_P(src1);
+  strncat_P(ptr, src1, len);
+  ptr = ptr + len;
+  *ptr = '\0';
+  //  Serial.println(dest);
+  return ptr;
+}
+
+char *SIM::str_cat(char *dest, const char *src)
+{
+  Serial.println(F("RAM Function: "));
+  char *ptr = dest;
+  int8_t len  = strlen(src);
+  strncat(ptr, src, len);
+  ptr = ptr + len;
+  *ptr = '\0';
+  //  Serial.println(dest);
+  return ptr;
+}
+/*******************Done function overloading********************/
 /*
    Concate ram string and return the pointer after concate.
 */
@@ -541,7 +619,7 @@ char *SIM::str_my_cat(char *dest, const char *src)
   strncat(ptr, src, len);
   ptr = ptr + len;
   *ptr = '\0';        //terminating as extra safety
-  bool test = *ptr == NULL;
+  // bool test = *ptr == NULL;
   //  Serial.print("Last char: ");Serial.print(test);
   //  Serial.println();
   return ptr;
@@ -559,7 +637,9 @@ char *SIM::str_my_cat_P(char *dest, const char *src)
   *ptr = '\0';
   return ptr;
 }
+/*
 
+*/
 char *SIM::char_cat(char *dest, char c)
 {
   //  char *ptr = dest;
