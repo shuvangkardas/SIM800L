@@ -10,7 +10,8 @@ ShiftRegister74HC595 sr(1, 7, 5, 6);
 
 const char apn[] PROGMEM = "gpinternet";
 //const char URL[] PROGMEM = "http://dataxlogger.com/data/k5199h01";
-#define URL F("http://dataxlogger.com/data/k5199h01")
+//#define URL F("http://dataxlogger.com/data/k5199h01")
+const char URL[] = "http://dataxlogger.com/data/k5199h01";
 
 const char CONTENT_TYPE[] PROGMEM = "application/json";
 
@@ -43,6 +44,12 @@ void setup()
 
 void loop()
 {
+  /***************Test Area***********************************/
+
+
+  /************************************************************/
+
+  
   Serial.print(F("<----------------Loop Starts------------------>"));
 
   bool reg = sim.isRegistered();

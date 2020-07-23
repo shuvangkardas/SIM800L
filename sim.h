@@ -32,9 +32,8 @@ class SIM
     /***********Attach function******************/
 
     /***********HTTP Methods*********************/
-    // const __FlashStringHelper* ADDRESS
-//    bool httpSet(const char *url_P);
-    bool httpSet(const __FlashStringHelper *url);
+    bool httpSet(const __FlashStringHelper *url);//Take addess from Flash
+    bool httpSet(const char *url); //Take address from ram
 
     bool httpPostSetPacketType(const char *content);
     bool httpPostSetPayload(const char *payload);
@@ -45,7 +44,7 @@ class SIM
     char *httpStartTransmit(char req_type = '1'); //1 = http post | 0 = get
     bool httpClose();
 
-//    bool httpPOST(const char *URL_P, const char *packet, const char * packetType, int httpCode = 200);
+    bool httpPOST(const char *URL_P, const char *packet, const char * packetType, int httpCode = 200);
     bool httpPOST(const __FlashStringHelper *URL, const char *packet, const char * packetType, int httpCode = 200);
     //basic commands methods
     char *send_cmd(const char *cmd);
