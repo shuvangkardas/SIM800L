@@ -310,6 +310,8 @@ bool SIM::connectGprs(const __FlashStringHelper *apn)
       return true;
     }
   } while (--tryCount);
+  Serial.println(F("<=======Sim Restarts=======>"));
+  _simRestart();
   return false;
 }
 bool SIM::connectGprs(const char *apn)
