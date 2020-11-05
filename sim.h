@@ -8,6 +8,8 @@
 
 //class SIM; // forward decl
 typedef void (*func_t)(void);
+#define POST '1'
+#define GET  '0'
 
 class SIM
 {
@@ -35,6 +37,7 @@ class SIM
     /***********Attach function******************/
 
     /***********HTTP Methods*********************/
+
     bool httpSet(const __FlashStringHelper *url);//Take addess from Flash
     bool httpSet(const char *url); //Take address from ram
 
@@ -49,6 +52,12 @@ class SIM
 
     bool httpPOST(const char *URL, const char *packet, const char * packetType, int httpCode = 200);
     bool httpPOST(const __FlashStringHelper *URL, const char *packet, const __FlashStringHelper * packetType, int httpCode = 200);
+
+/************************New Post API*************************************/
+    void postSetParam(const __FlashStringHelper *url, const __FlashStringHelper *conType);
+    int postWaitAck();
+    void httpStart(char req_type);
+    bool httpPOST(const char *packet);
     
     //basic commands methods
     char *send_cmd(const char *cmd);
@@ -84,6 +93,9 @@ class SIM
     int _http_timeout = 5000;
     //    const char *_apnPtr;
     func_t _simRestart = NULL;
+
+    __FlashStringHelper *_postUrl;
+    __FlashStringHelper *_postContentType;
 
 
 

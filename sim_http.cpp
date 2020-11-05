@@ -122,8 +122,7 @@ bool SIM::httpPostSetPayload(const char *payload)
 
 }
 
-
-char *SIM::httpStartTransmit(char req_type)
+void SIM::httpStart(char req_type);
 {
   bool ok = false;
   char *p = _sub_buf;
@@ -131,9 +130,22 @@ char *SIM::httpStartTransmit(char req_type)
   p = str_cat_P(p, AT_HTTPACTION);
   p = char_cat(p, req_type);
   p = char_cat(p, '\r');
-
   ok = at_cmd(_sub_buf, OK_REPLY);
-  Serial.print(F("POST Session start ok: ")); Serial.println(ok);
+  Serial.print(F("HTTP Session Starts : ")); Serial.println(ok);
+}
+
+char *SIM::httpStartTransmit(char req_type)
+{
+  // bool ok = false;
+  // char *p = _sub_buf;
+  // *p = '\0';
+  // p = str_cat_P(p, AT_HTTPACTION);
+  // p = char_cat(p, req_type);
+  // p = char_cat(p, '\r');
+
+  // ok = at_cmd(_sub_buf, OK_REPLY);
+  // Serial.print(F("POST Session start ok: ")); Serial.println(ok);
+  httpStart(req_type);
 
   char *ptr;
   long startMillis = millis();
@@ -205,3 +217,41 @@ bool SIM::httpPOST(const __FlashStringHelper *URL, const char *packet, const __F
   }
 }
 
+/***********************Modifying POST API************************/
+
+void SIM::postSetParam(const __FlashStringHelper *url, const __FlashStringHelper *conType)
+{
+	_postUrl = url;
+    _postContentType =  conType;
+}
+
+bool SIM::postWaitAck()
+{
+  char *ptr;
+  long startMillis = millis();
+  do
+  {
+    ptr = _read_sim();
+    Serial.println(ptr);
+    if (strlen(ptr))
+    {
+      // return ptr;
+
+      char *retPtr = sub_string(ptr, ',', ',');
+  	  Serial.println(retPtr);
+  	  int retCode; = atoi(retPtr);
+  	  return retCode;
+    }
+  } while (millis() - startMillis < 10000);
+  Serial.println(F("<POST TIMEOUT>"));
+  return -1;
+}
+
+bool httpPOST(const char *packet)
+{
+  bool ok = false;
+  ok = httpSet(_postUrl);
+  ok = httpPostSetPacketType(_postContentType);
+  ok = httpPostSetPayload(packet);
+  httpStart(POST);
+}
