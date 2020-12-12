@@ -11,11 +11,11 @@
 ## Arduino Library for SIM800L Module
 <sup> Download the latest stable release from [here][download-latest]. Please report any bugs in [issues][report-bug].</sup>
 
-This is a arduino library for sim800 module. The library is developed focusing on internet connectivity for the arduino development. The library is much faster than any other library which can perform an http post request within a one and half second.
+This is an arduino library for sim800 module. The library is developed focusing on internet connectivity for the arduino development. The library is much faster than any other library which can perform an http post request within an one and half second.
 
 The library has following special features.
 - URL and input parameters supports both ram and flash memory 
-- The post url can be set once as well as can be changeed anytime.
+- The post url can be set once as well as can be changed anytime.
 
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
