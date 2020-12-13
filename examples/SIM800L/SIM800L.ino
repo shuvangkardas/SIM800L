@@ -1,12 +1,12 @@
 #include <SoftwareSerial.h>
-#include <ShiftRegister74HC595.h>
+//#include <ShiftRegister74HC595.h>
 #include "sim.h"
 
 
-ShiftRegister74HC595 sr(1, 7, 5, 6);
-#define SR_SIM_PIN 6
-#define SR_SIM_ON() sr.set(SR_SIM_PIN, LOW)
-#define SR_SIM_OFF() sr.set(SR_SIM_PIN, HIGH)
+//ShiftRegister74HC595 sr(1, 7, 5, 6);
+//#define SR_SIM_PIN 6
+//#define SR_SIM_ON() sr.set(SR_SIM_PIN, LOW)
+//#define SR_SIM_OFF() sr.set(SR_SIM_PIN, HIGH)
 
 
 //#define APN F("gpinternet")
@@ -83,16 +83,8 @@ void loop()
 void simRetart()
 {
   Serial.println(F("Sim Restarts.."));
-  SR_SIM_OFF();
-  delay(100);
-  SR_SIM_ON();
+//  SR_SIM_OFF();
+//  delay(100);
+//  SR_SIM_ON();
   delay(3000);
 }
-
-
-
-
-
-
-
-
