@@ -42,8 +42,8 @@ The library has following special features.
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[build-shield]:https://travis-ci.org/Marzogh/SPIMemory.svg?style=for-the-badge
-[build-url]: https://travis-ci.org/Marzogh/SPIMemory
+[build-shield]:https://travis-ci.com/shuvangkar/SIM800L.svg?branch=master
+[build-url]: https://travis-ci.com/github/shuvangkar/SIM800L
 
 [release-shield]: https://img.shields.io/github/release/shuvangkar/SIM800L.svg
 [release-url]: https://github.com/shuvangkar/SIM800L
