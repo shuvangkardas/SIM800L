@@ -122,7 +122,7 @@ bool SIM::httpPostSetPayload(const char *payload)
 
 }
 
-void SIM::httpStart(char req_type);
+void SIM::httpStart(char req_type)
 {
   bool ok = false;
   char *p = _sub_buf;
@@ -222,10 +222,10 @@ bool SIM::httpPOST(const __FlashStringHelper *URL, const char *packet, const __F
 void SIM::postSetParam(const __FlashStringHelper *url, const __FlashStringHelper *conType)
 {
 	_postUrl = url;
-    _postContentType =  conType;
+  _postContentType =  conType;
 }
 
-bool SIM::postWaitAck()
+int SIM::postWaitAck()
 {
   char *ptr;
   long startMillis = millis();
@@ -239,7 +239,7 @@ bool SIM::postWaitAck()
 
       char *retPtr = sub_string(ptr, ',', ',');
   	  Serial.println(retPtr);
-  	  int retCode; = atoi(retPtr);
+  	  int retCode = atoi(retPtr);
   	  return retCode;
     }
   } while (millis() - startMillis < 10000);
@@ -247,7 +247,7 @@ bool SIM::postWaitAck()
   return -1;
 }
 
-bool httpPOST(const char *packet)
+bool SIM::httpPOST(const char *packet)
 {
   bool ok = false;
   ok = httpSet(_postUrl);
