@@ -223,6 +223,9 @@ void SIM::postSetParam(const __FlashStringHelper *url, const __FlashStringHelper
 {
 	_postUrl = url;
   _postContentType =  conType;
+
+  Serial.print(F("URL : "));Serial.println(_postUrl);
+  Serial.print(F("ConType : "));Serial.println(_postContentType);
 }
 
 int SIM::postWaitAck()
