@@ -28,7 +28,7 @@ const char AT_HTTPTERM[] PROGMEM = "AT+HTTPTERM\r";
 const char DOWNLOAD_REPLY[] PROGMEM = "DOWNLOAD";
 const char HTTP_SUCCESS_CODE[] PROGMEM = "200";
 
-
+const char CALL_READY[] PROGMEM = "CALL_READY";	
 
 
 

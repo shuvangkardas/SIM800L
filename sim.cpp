@@ -170,6 +170,21 @@ bool SIM::isOk()
   } while (--try_count);
   return false;
 }
+
+bool SIM::isSimReady()
+{
+	bool ready = false;
+	do
+	{
+		if(serial -> available())
+		{
+			char *p = _read_sim();
+			Serial.println(p);
+			ready = cmd_cmp_P(p,CALL_READY);
+		}
+	}while(!ready);
+}
+
 bool SIM::setBaud(unsigned long baud)
 {
   if (isOk())
@@ -199,7 +214,8 @@ bool SIM::isRegistered()
     {
       return true;
     }
-  } while (millis() - ms1 < 10000);
+    delay(200);
+  } while (millis() - ms1 < 5000);
   return false;
 }
 

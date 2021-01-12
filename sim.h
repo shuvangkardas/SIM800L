@@ -22,6 +22,7 @@ class SIM
 
     /********Sim Basic Functionality*************/
     bool isOk();
+    bool isSimReady();
     bool isRegistered();
     bool setBaud(unsigned long baud);
     
