@@ -15,7 +15,7 @@ void SIM::begin(int timeout)
   Serial.println(F("Sim begin"));
   if ( _simRestart != NULL)
   {
-    _simRestart();
+    // _simRestart();
   }
   //  _max_time = timeout;
 }
@@ -333,6 +333,8 @@ bool SIM::connectGprs(const char *apn)
       return true;
     }
   } while (--tryCount);
+  Serial.println(F("<=======Sim Restarts=======>"));
+  _simRestart();
   return false;
 }
 bool SIM::closeGPRS()
