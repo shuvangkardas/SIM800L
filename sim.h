@@ -56,6 +56,7 @@ class SIM
 
 /************************New Post API*************************************/
     void postSetParam(const __FlashStringHelper *url, const __FlashStringHelper *conType);
+    void postSetParam(char *url, const __FlashStringHelper *conType);
     int postWaitAck();
     void httpStart(char req_type);
     bool httpPOST(const char *packet);
@@ -95,9 +96,12 @@ class SIM
     //    const char *_apnPtr;
     func_t _simRestart = NULL;
 
-    __FlashStringHelper *_postUrl;
+    __FlashStringHelper *_postUrl_P = NULL;
+    char *_postUrl = NULL;
+
     __FlashStringHelper *_postContentType;
 
+    
 
 
     void _buffer_clear();

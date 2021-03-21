@@ -221,9 +221,19 @@ bool SIM::httpPOST(const __FlashStringHelper *URL, const char *packet, const __F
 
 void SIM::postSetParam(const __FlashStringHelper *url, const __FlashStringHelper *conType)
 {
-	_postUrl = url;
+  _postUrl = NULL;
+	_postUrl_P = url;
   _postContentType =  conType;
 
+  Serial.print(F("URL : "));Serial.println(_postUrl_P);
+  Serial.print(F("ConType : "));Serial.println(_postContentType);
+}
+void SIM::postSetParam(char *url, const __FlashStringHelper *conType)
+{
+  _postUrl = url;
+  _postUrl_P = NULL;
+  _postContentType = conType;
+  
   Serial.print(F("URL : "));Serial.println(_postUrl);
   Serial.print(F("ConType : "));Serial.println(_postContentType);
 }
@@ -253,7 +263,19 @@ int SIM::postWaitAck()
 bool SIM::httpPOST(const char *packet)
 {
   bool ok = false;
-  ok = httpSet(_postUrl);
+
+  if(_postUrl !=NULL)
+  {
+     ok = httpSet(_postUrl);
+  }
+  else if(_postUrl_P != NULL)
+  {
+     ok = httpSet(_postUrl_P);
+  }
+  else
+  {
+    Serial.println(F("No URL Found"));
+  }
   ok = httpPostSetPacketType(_postContentType);
   ok = httpPostSetPayload(packet);
   httpStart(POST);
